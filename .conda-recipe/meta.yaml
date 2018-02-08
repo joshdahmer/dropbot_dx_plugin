@@ -44,5 +44,5 @@ test:
     - python -m mpm.bin.import_test -a {{ PKG_NAME }}
 
 about:
-  home: http://github.com/joshdahmer/dropbot-dx-plugin
+  home: http://github.com/joshdahmer/dropbot_dx_plugin
   license: GPL

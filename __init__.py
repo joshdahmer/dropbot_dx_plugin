@@ -58,16 +58,16 @@ PluginGlobals.push_env('microdrop.managed')
 class DmfZmqPlugin(ZmqPlugin):
     """
     API for adding/clearing droplet routes.
-    """ 
+    """
     def __init__(self, parent, *args, **kwargs):
         self.parent = parent
         super(DmfZmqPlugin, self).__init__(*args, **kwargs)
 
     def check_sockets(self):
-        """ 
+        """
         Check for messages on command and subscription sockets and process
         any messages accordingly.
-        """ 
+        """
         try:
             msg_frames = self.command_socket.recv_multipart(zmq.NOBLOCK)
         except zmq.Again:
@@ -78,9 +78,9 @@ class DmfZmqPlugin(ZmqPlugin):
         try:
             msg_frames = self.subscribe_socket.recv_multipart(zmq.NOBLOCK)
             source, target, msg_type, msg_json = msg_frames
-            if ((source == 'wheelerlab.electrode_controller_plugin') and
+            if ((source == 'microdrop.electrode_controller_plugin') and
                 (msg_type == 'execute_reply')):
-                # The 'wheelerlab.electrode_controller_plugin' plugin maintains
+                # The 'microdrop.electrode_controller_plugin' plugin maintains
                 # the requested state of each electrode.
                 msg = json.loads(msg_json)
                 if msg['content']['command'] in ('set_electrode_state',
@@ -168,7 +168,7 @@ class DropBotDxPlugin(Plugin, StepOptionsController, AppDataController):
         the StepFields member (vs through the get_step_form_class method).
         """
         return self.get_step_form_class()
-    
+
 
     def __init__(self):
         self.control_board = None
@@ -181,9 +181,9 @@ class DropBotDxPlugin(Plugin, StepOptionsController, AppDataController):
         self.plugin_timeout_id = None
 
     def get_step_form_class(self):
-        """ 
+        """
         Override to set default values based on their corresponding app options.
-        """ 
+        """
         app = get_app()
         app_values = self.get_app_values()
         return Form.of(
@@ -287,7 +287,7 @@ class DropBotDxPlugin(Plugin, StepOptionsController, AppDataController):
                 self.control_board.hv_output_enabled = False
 
     def connect(self):
-        """ 
+        """
         Try to connect to the control board at the default serial port selected
         in the Microdrop application options.
 
@@ -321,7 +321,7 @@ class DropBotDxPlugin(Plugin, StepOptionsController, AppDataController):
         In the case where the device firmware version does not match, display a
         dialog offering to flash the device with the firmware version that
         matches the host driver API version.
-        """ 
+        """
         try:
             self.connect()
             name = self.control_board.properties['package_name']
@@ -355,7 +355,7 @@ class DropBotDxPlugin(Plugin, StepOptionsController, AppDataController):
                              "flashing?")
             if response == gtk.RESPONSE_YES:
                 self.save_config()
-            """ 
+            """
             hardware_version = utility.Version.fromstring(
                 self.control_board.hardware_version
             )
